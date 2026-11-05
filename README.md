@@ -8,7 +8,7 @@ Every step, result and decision is recorded so the work is fully traceable and r
 | If you want to... | Read |
 |---|---|
 | Understand the project in 5 minutes | [`SUMMARY.md`](SUMMARY.md): current context, findings and next steps |
-| See the research objectives | [`docs/OULAD_Research_Objectives.pdf`](docs/OULAD_Research_Objectives.pdf) |
+| Read the research gaps and objectives (PDF, 10 pages) | [`docs/OULAD_Research_Objectives.pdf`](docs/OULAD_Research_Objectives.pdf): dataset overview, Step 01 findings, **7 research gaps explained (section 5)**, the 5 objectives P1-P5, comparison, recommendation, references |
 | See every action in order | [`LOG.md`](LOG.md): chronological log of actions, decisions, findings and issues |
 | Know why something was done | [`decisions/`](decisions/): one folder per decision, each with a `decision.md` |
 | Check prior work on OULAD | [`literature/literature_review.md`](literature/literature_review.md) |
@@ -26,7 +26,7 @@ oulad_journal/
 ├── results/stepNN_name/   ← outputs of each step (reports, tables, plots)
 ├── decisions/DNNN_topic/  ← decision.md for every decision
 ├── literature/            ← literature scan of prior OULAD studies
-├── docs/                  ← generated documents (objectives PDF)
+├── docs/                  ← OULAD_Research_Objectives.pdf (gaps + objectives)
 └── data/raw/              ← OULAD CSVs (not in Git; downloaded by step00)
 ```
 
@@ -36,7 +36,7 @@ From the project root:
 pip install -r requirements.txt
 python code/step00_download_data.py     # downloads OULAD (~47 MB zip, ~500 MB extracted)
 python code/step01_overview.py          # Step 01: overview and data quality of studentInfo
-python code/make_objectives_pdf.py      # rebuilds docs/OULAD_Research_Objectives.pdf
+python code/make_objectives_pdf.py      # rebuilds docs/OULAD_Research_Objectives.pdf (gaps + objectives)
 ```
 Tested with Python 3.13.7 on Windows 11.
 

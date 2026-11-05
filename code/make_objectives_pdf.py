@@ -236,10 +236,10 @@ story += [
     p("Refined Research Objectives", H_TITLE),
     p("Open University Learning Analytics Dataset (OULAD)", H_SUB),
     p("Five Q1-oriented study proposals, based on a literature scan and first-pass data exploration", H_SUB),
-    p("Version 1.0  |  5 November 2026  |  Decision record D005", H_SUB),
+    p("Version 1.1  |  5 November 2026  |  Decision record D005", H_SUB),
     Spacer(1, 0.8 * cm),
     p("1. Purpose", H1),
-    p("This document refines an initial list of 16 candidate objectives into five study proposals. "
+    p("This document explains the research gaps found in the OULAD literature and refines an initial list of 16 candidate objectives into five study proposals. "
       "Each one addresses a gap in the existing OULAD literature and can support a stand-alone journal "
       "article. Each objective states the real-world problem, the gap, the evidence already seen in the "
       "data, research questions, data and methods, evaluation metrics, expected contribution and risks."),
@@ -278,6 +278,95 @@ story += bullets([
 ])
 story.append(PageBreak())
 
+# ---- Research gaps explained ----------------------------------------------
+GAPS = [
+    ("Gap 1. Reported accuracy may be inflated by data leakage", "P1",
+     "<i>Data leakage</i> means the model sees information during training or testing that it would not "
+     "have in real use, so the paper's result looks better than reality.",
+     "(a) <b>Same student in train and test:</b> 32,593 rows but 28,785 students, so 3,808 repeat "
+     "enrolments. A random split can put a student's first module in training and second module in test, "
+     "and the model partly recognises the student, like grading an exam after seeing that student's earlier "
+     "answer sheet. (b) <b>Future information:</b> a paper claims to predict at week 4 but uses a score "
+     "released in week 6. OULAD does not record when scores were released, which makes this easy to get wrong.",
+     "Recent papers show that both problems inflate AUC and propose safe pipelines.",
+     "No one has measured how much well-known published OULAD results are inflated, or whether the "
+     "'best model' is still best once the leakage is removed."),
+    ("Gap 2. The assessment design itself is not studied", "P2",
+     "Almost every paper asks <i>which student</i> will drop out, using that student's behaviour. Very few "
+     "ask whether <i>the way the course is assessed</i> pushes students out.",
+     "Module X sets its first tutor-marked assignment (TMA) on day 20, worth 25% of the grade. Module Y "
+     "starts with a 0% computer-marked quiz (CMA) and sets its first TMA on day 45. If withdrawals spike "
+     "just before day 20 in Module X, that is a course-design problem, not a student problem.",
+     "Studies of submission behaviour (late-submission ratio, score trend) used to predict dropout.",
+     "Design properties (type, weight, deadline spacing, first-assessment date) treated as explanatory "
+     "factors across modules, and whether coursework predicts exam results equally in every module. "
+     "Course teams can change deadlines far more easily than they can change students."),
+    ("Gap 3. Fairness is checked one attribute at a time", "P3",
+     "A model is unfair if it makes more mistakes for one group than another, for example missing at-risk "
+     "disabled students more often.",
+     "A model can look fair for gender and fair for deprivation separately, yet badly miss <b>disabled "
+     "students from deprived areas over 35</b>. Studying combined groups is called <i>intersectionality</i>. "
+     "Also, only 216 students are aged 55+: an error rate of 30% vs 25% may be random noise without a "
+     "confidence interval.",
+     "Single-attribute fairness audits; mitigation results that conflict (one study finds that it helps, "
+     "another that it widens the gaps).",
+     "An intersectional audit that reports uncertainty and claims only the gaps that are statistically reliable."),
+    ("Gap 4. Missing data may itself be a warning sign", "P3",
+     "imd_band (deprivation of the home area) is missing for 1,111 rows (3.41%). Most papers delete those rows.",
+     "Data is not always missing by chance: the address may not have matched or registration may have been "
+     "incomplete. If these students withdraw more often, deleting them hides a vulnerable group, and the "
+     "missingness could even help predict risk (MCAR vs MAR/MNAR).",
+     "Rows with missing values are usually dropped, or filled with the most common value.",
+     "A test of whether the missingness is informative. <b>This is a hypothesis; it will be tested in Step 02</b> "
+     "(e.g. chi-square of 'imd missing' vs final_result)."),
+    ("Gap 5. Accuracy alone is misleading", "All",
+     "Accuracy hides class imbalance and says nothing about whether risk probabilities can be trusted.",
+     "Only 9.3% of rows are Distinction, so a model that never predicts Distinction is still 90.7% "
+     "accurate on that class. <i>Calibration:</i> if a model gives 100 students a 70% risk, about 70 of "
+     "them should actually withdraw.",
+     "Most OULAD papers report accuracy, F1 or AUC.",
+     "Routine reporting of PR-AUC, Brier score / calibration plots and confidence intervals."),
+    ("Gap 6. When to intervene, given limited staff", "P4",
+     "Papers predict one end-of-course label. Universities need to know which students to contact each "
+     "week, and from which week the model can be trusted.",
+     "Advisors can call 50 students a week. Predicting in week 2 leaves time to help but is less accurate; "
+     "predicting in week 10 is more accurate but many students have already left.",
+     "Single-label prediction; an emerging survival benchmark (arXiv 2604.08870).",
+     "Survival analysis (<i>when</i> withdrawal happens) linked to real advisor capacity, using "
+     "precision@k. OULAD records the exact unregistration day, which makes this possible."),
+    ("Gap 7. Explanations may not transfer to new courses", "P5",
+     "Models trained on old courses are reused on new ones. Both their accuracy and their explanations may change.",
+     "SHAP says a student was flagged for 'low forum activity'. That is meaningful in a discussion-based "
+     "module and meaningless in a module without a forum. Train on 6 modules and test on the 7th, or "
+     "train on 2013 and test on 2014.",
+     "SHAP applied on a single train/test split.",
+     "Peer-reviewed tests of explanation stability across unseen modules and presentations. Note: SHAP "
+     "shows what the model uses, not what causes withdrawal."),
+]
+
+story += [p("5. Research gaps explained", H1),
+          p("A <b>research gap</b> is a real-world question that earlier papers have not answered, have "
+            "answered badly, or have answered with conflicting results. Each gap below states what it "
+            "means, gives an example from OULAD, what has been done, and what is still missing.")]
+for title, obj, meaning, example, done, missing in GAPS:
+    story.append(KeepTogether([
+        p(f"{title}  <font color='#555555' size='8.5'>(objective {obj})</font>", H2),
+        kv_table([("What it means", meaning), ("Example", example),
+                  ("Already done", done), ("Still missing", missing)]),
+        Spacer(1, 4),
+    ]))
+story += [Spacer(1, 6), table([
+    ["#", "Gap in one sentence", "Objective"],
+    ["1", "Accuracy inflated by the same student or future data leaking into training", "P1"],
+    ["2", "Assessment design (type, weight, deadlines) not tested as a driver of withdrawal", "P2"],
+    ["3", "Fairness checked one attribute at a time, with no uncertainty for small groups", "P3"],
+    ["4", "Missing deprivation data may mark a hidden vulnerable group", "P3"],
+    ["5", "Accuracy hides imbalance and untrustworthy probabilities", "All"],
+    ["6", "No answer to when to intervene with limited advisors", "P4"],
+    ["7", "Explanations may change when a model is reused on a new course", "P5"],
+], [1 * cm, 13.5 * cm, 2.5 * cm])]
+story.append(PageBreak())
+
 # ---- Objectives -----------------------------------------------------------
 for i, o in enumerate(OBJECTIVES):
     block = [p(f"{o['id']}. {o['title']}", H1),
@@ -302,7 +391,7 @@ story.append(PageBreak())
 
 # ---- Comparison and recommendation ----------------------------------------
 story += [
-    p("5. Comparison of objectives", H1),
+    p("6. Comparison of objectives", H1),
     table([
         ["", "Novelty", "Effort", "ML needed", "Fits Pandas / NumPy focus", "Main tables"],
         ["P1 Leakage audit", "High", "High", "Heavy", "Medium", "All"],
@@ -311,12 +400,12 @@ story += [
         ["P4 Intervention timing", "Medium", "Medium-high", "Moderate", "Medium", "studentRegistration, studentVle"],
         ["P5 Cross-module transfer", "Medium", "High", "Heavy", "Medium", "All"],
     ], [3.8 * cm, 2.1 * cm, 2.1 * cm, 2.0 * cm, 3.2 * cm, 3.8 * cm]),
-    p("6. Recommendation", H1),
+    p("7. Recommendation", H1),
     p("Start with <b>P2 (assessment design)</b> or <b>P3 (intersectional fairness)</b>. Both are less "
       "crowded, build on data already explored, and suit a statistics-led paper in which Pandas and "
       "NumPy carry most of the analysis. P1 offers the strongest methodological novelty and is a good "
       "second paper once the leakage-safe pipeline exists, because P3, P4 and P5 can reuse it."),
-    p("7. Quality requirements for Q1 submission", H1),
+    p("8. Quality requirements for Q1 submission", H1),
 ]
 story += bullets([
     "The contribution is a research finding about education; tool usage belongs in the Methods section.",
@@ -331,7 +420,7 @@ story += [
     p("Candidate venues (check the current quartile on SCImago / JCR before submitting): Computers &amp; "
       "Education; British Journal of Educational Technology; The Internet and Higher Education; IEEE "
       "Transactions on Learning Technologies; Education and Information Technologies.", BODY),
-    p("8. Key references (verify before citing)", H1),
+    p("9. Key references (verify before citing)", H1),
 ]
 refs = [
     "Kuzilek J., Hlosta M., Zdrahal Z. (2017). Open University Learning Analytics dataset. Scientific Data 4:170171.",
@@ -367,7 +456,7 @@ def footer(canvas, doc):
     canvas.saveState()
     canvas.setFont("Helvetica", 8)
     canvas.setFillColor(GREY)
-    canvas.drawString(2 * cm, 1.2 * cm, "OULAD Research Objectives  |  D005  |  v1.0")
+    canvas.drawString(2 * cm, 1.2 * cm, "OULAD Research Objectives  |  D005  |  v1.1")
     canvas.drawRightString(A4[0] - 2 * cm, 1.2 * cm, f"Page {doc.page}")
     canvas.restoreState()
 

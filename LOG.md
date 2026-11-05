@@ -26,3 +26,4 @@ Format: `date | step | type (ACTION / DECISION / FINDING / ISSUE) | description 
 | 2026-11-05 | 01c | ISSUE | studentVle.csv is 433 MB, over GitHub's 100 MB file limit | — |
 | 2026-11-05 | 01c | DECISION | Exclude data/raw from Git; add a download script, requirements.txt and README.md | [D006](decisions/D006_github_data_policy/decision.md) |
 | 2026-11-05 | 01c | ACTION | Wrote a plain-language explanation of the 7 research gaps | [gaps](literature/research_gaps_explained.md) |
+| 2026-11-05 | 01c | ACTION | Added section 5 "Research gaps explained" to the objectives PDF (v1.1, now 10 pages); README updated | [PDF](docs/OULAD_Research_Objectives.pdf) |
