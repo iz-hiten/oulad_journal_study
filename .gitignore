@@ -1,0 +1,15 @@
+# Raw OULAD data is downloaded by code/step00_download_data.py (see decisions/D006)
+data/raw/
+data/processed/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

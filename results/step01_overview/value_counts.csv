@@ -1,0 +1,52 @@
+column,value,count,pct
+code_module,BBB,7909,24.27
+code_module,FFF,7762,23.81
+code_module,DDD,6272,19.24
+code_module,CCC,4434,13.6
+code_module,EEE,2934,9.0
+code_module,GGG,2534,7.77
+code_module,AAA,748,2.29
+code_presentation,2014J,11260,34.55
+code_presentation,2013J,8845,27.14
+code_presentation,2014B,7804,23.94
+code_presentation,2013B,4684,14.37
+gender,M,17875,54.84
+gender,F,14718,45.16
+region,Scotland,3446,10.57
+region,East Anglian Region,3340,10.25
+region,London Region,3216,9.87
+region,South Region,3092,9.49
+region,North Western Region,2906,8.92
+region,West Midlands Region,2582,7.92
+region,South West Region,2436,7.47
+region,East Midlands Region,2365,7.26
+region,South East Region,2111,6.48
+region,Wales,2086,6.4
+region,Yorkshire Region,2006,6.15
+region,North Region,1823,5.59
+region,Ireland,1184,3.63
+highest_education,A Level or Equivalent,14045,43.09
+highest_education,Lower Than A Level,13158,40.37
+highest_education,HE Qualification,4730,14.51
+highest_education,No Formal quals,347,1.06
+highest_education,Post Graduate Qualification,313,0.96
+imd_band,20-30%,3654,11.21
+imd_band,30-40%,3539,10.86
+imd_band,10-20,3516,10.79
+imd_band,0-10%,3311,10.16
+imd_band,40-50%,3256,9.99
+imd_band,50-60%,3124,9.58
+imd_band,60-70%,2905,8.91
+imd_band,70-80%,2879,8.83
+imd_band,80-90%,2762,8.47
+imd_band,90-100%,2536,7.78
+imd_band,,1111,3.41
+age_band,0-35,22944,70.4
+age_band,35-55,9433,28.94
+age_band,55<=,216,0.66
+disability,N,29429,90.29
+disability,Y,3164,9.71
+final_result,Pass,12361,37.93
+final_result,Withdrawn,10156,31.16
+final_result,Fail,7052,21.64
+final_result,Distinction,3024,9.28
